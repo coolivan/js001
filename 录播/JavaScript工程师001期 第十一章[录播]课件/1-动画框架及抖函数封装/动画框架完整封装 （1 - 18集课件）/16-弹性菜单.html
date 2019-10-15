@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #list li {
+            margin-top: 20px;
+            width: 200px;
+            font: 14px/40px "宋体";
+            text-indent: 2em;
+            color: #fff;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+ <ul id="list">
+    <li>选项一</li>
+    <li>选项二</li>
+    <li>选项三</li>
+ </ul>
+ <script src="js/mTween.js"></script>
+ <script>
+(function(){
+    var list = document.querySelectorAll("#list li");
+    list.forEach(function(item){
+        item.onmouseover = function(){
+            mTween.stop(this);
+            mTween({
+                el: this,
+                attr: {
+                    width: 400
+                },
+                duration: 600,
+                fx: "bounceOut"
+            });
+        };
+        item.onmouseout = function(){
+            mTween.stop(this);
+            mTween({
+                el: this,
+                attr: {
+                    width: 200
+                },
+                duration: 2000,
+                //fx: "bounceOut"
+                fx: "easeOutStrong"
+            });
+        };
+    });    
+})();   
+ </script>
+</body>
+</html>

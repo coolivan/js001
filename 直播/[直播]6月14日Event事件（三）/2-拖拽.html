@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+ 页面文字   
+<div id="box">元素文字</div>
+<script src="mTween.js"></script>
+<script>
+{
+    let box = document.querySelector("#box");
+
+    drag();
+    // 拖拽
+    function drag(){
+        // 记录摁下时元素的位置
+        let startPosition = {};
+        // 记录摁下时鼠标的位置
+        let startMouse = {};
+        let move = (e)=>{
+            let nowMouse = {
+                x: e.clientX,
+                y: e.clientY
+            };
+            let dis = {
+                x: nowMouse.x - startMouse.x,
+                y: nowMouse.y - startMouse.y
+            };
+            css(box,"left",dis.x + startPosition.x);
+            css(box,"top",dis.y + startPosition.y);
+        };
+        box.addEventListener("mousedown",function(e){
+            startMouse.x = e.clientX;
+            startMouse.y = e.clientY;
+            startPosition.x = css(box,"left");
+            startPosition.y = css(box,"top");
+            document.addEventListener("mousemove",move);
+            document.addEventListener("mouseup",()=>{
+                document.removeEventListener("mousemove",move);
+            },{once:true})
+            e.preventDefault();// 阻止选中
+        });
+    }
+}
+</script>
+</body>
+</html>

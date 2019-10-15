@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script src="mTween.js"></script>
+<script>
+// 在元素现有位置上，向左，向右进行移动
+(function(){
+    var box = document.querySelector("#box");
+    var startL = css(box,"left");
+    var arr = [];
+    var shake = 30;
+    for(var i = 20; i >=0; i--){
+        arr.push(i%2?i:-i);
+    }
+    var timer = setInterval(function(){
+        if(arr.length <= 0){
+            clearInterval(timer);
+        } else {
+            css(box,"left",startL + arr.shift());
+        
+        }
+    },30);
+    // 110
+    // 91
+    // 108
+    // 92
+    // 107
+    // 93
+    // 106
+    // 
+
+})();
+</script>
+</body>
+</html>

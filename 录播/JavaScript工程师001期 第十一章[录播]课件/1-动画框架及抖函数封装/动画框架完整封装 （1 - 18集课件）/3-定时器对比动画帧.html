@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: relative;
+        }
+        #box div {
+            position: absolute;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<button>跑</button>
+<button>停</button>   
+<div id="box">
+
+</div>
+<script>
+(function(){
+    var box = document.querySelector("#box");
+    var inner = "";
+    for(var i = 0; i < 200; i++){
+        inner += '<div style="top:'+i*100+'px"></div>'
+    }
+    box.innerHTML = inner;
+    var btn = document.querySelectorAll("button");
+    var divs = box.querySelectorAll("div");
+    btn[0].onclick = function(){
+        divs.forEach(function(div){
+            setInterval(function(){
+                var l = parseInt(getComputedStyle(div)["left"]);
+                div.style.left = l + 2 + "px";
+            },1000/60);
+        });
+        // divs.forEach(function(div){
+        //     move(div);
+        // });
+    };
+    function move(div){
+        requestAnimationFrame(function(){
+            var l = parseInt(getComputedStyle(div)["left"]);
+            div.style.left = l + 2 + "px";
+            move(div);
+       });
+    }
+})();
+</script>
+</body>
+</html>

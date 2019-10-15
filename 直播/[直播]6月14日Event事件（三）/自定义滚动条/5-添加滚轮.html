@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义滚动条</title>
+    <style>
+        body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url(./imgs/bg.png) no-repeat;
+            background-size: 100% 100%;
+            overflow-y: hidden;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            position: absolute;
+        }
+
+        .wrap {
+            width: 100px;
+            height: 360px;
+            background-color: #fdfdfd;
+            position: relative;
+            border-radius: 10px;
+            margin: 200px auto;
+            padding-top: 11px;
+            padding-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .scroll-wrap {
+            width: 13px;
+            height: 363px;
+            background-color: #dedede;
+            position: absolute;
+            border: 1px solid #dedede;
+            top: 11px;
+            right: 7px;
+            border-radius: 10px;
+        }
+
+        .scroll {
+            width: 13px;
+            height: 30px;
+            background-color: #fcfcfc;
+            border-radius: 10px;
+            position: absolute;
+        }
+
+        li {
+            line-height: 36px;
+            text-indent: 21px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <ul class="list"></ul>
+        <div class="scroll-wrap">
+            <div class="scroll"></div>
+        </div>
+    </div>
+    <div style="height: 2000px;border: 1px solid red;"></div>
+    <script src="mTween.js"></script>
+    <script>
+        let arr = ['河北', '山西', '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建', '江西','山东', '河南', '湖北', '湖南', '广东', '海南', '四川', '贵州', '云南', '陕西', '甘肃', '青海', '台湾',
+            '北京', '天津', '上海', '重庆'
+        ];
+        let wrap = document.querySelector('.wrap')
+        let list = document.querySelector('.list');
+        let scrollWrap = document.querySelector('.scroll-wrap');
+        let scrollBar = document.querySelector('.scroll');
+        let maxY = 0;//滚动条能移动总距离
+        list.innerHTML = arr.map(item => {
+            return `<li>${item}</li>`
+        }).join('');
+        css(scrollBar,"height",css(wrap,"height")/css(list,"height")*css(scrollWrap,"height"));        
+        drag();
+        mouseScroll(wrap,(e)=>{
+            let nowY = css(scrollBar,"translateY");
+            nowY -= 10;
+            nowY = Math.max(nowY,0);
+            css(scrollBar,"translateY",nowY);
+            css(list,"translateY",-nowY/maxY*(css(list,"height") - css(wrap,"height")));
+            e.preventDefault();//阻止触发系统滚动条滚动
+        },(e)=>{
+            let nowY = css(scrollBar,"translateY");
+            nowY += 10;
+            maxY = css(scrollWrap,"height") - css(scrollBar,"height");
+            nowY = Math.min(nowY,maxY);
+            css(scrollBar,"translateY",nowY);
+            css(list,"translateY",-nowY/maxY*(css(list,"height") - css(wrap,"height")));
+            e.preventDefault();
+        });
+        function drag(){
+            let startMouseY = 0;
+            let startPositionY = 0;
+            css(scrollBar,"translateY",0);
+            css(list,"translateY",0);
+            let move = (e)=>{
+                let nowMouseY = e.clientY;
+                let disY = nowMouseY - startMouseY;
+                let nowY = disY + startPositionY;
+                nowY = Math.max(0,nowY);
+                nowY = Math.min(nowY,maxY);
+                css(scrollBar,"translateY",nowY);
+                css(list,"translateY",-nowY/maxY*(css(list,"height") - css(wrap,"height")));
+            };
+            scrollBar.addEventListener("mousedown",function(e){
+                startMouseY = e.clientY;
+                startPositionY = css(scrollBar,"translateY");
+                maxY = css(scrollWrap,"height") - css(scrollBar,"height");
+                document.addEventListener("mousemove",move);
+                document.addEventListener("mouseup",()=>{
+                    document.removeEventListener("mousemove",move);
+                },{once:true})
+                e.preventDefault();
+            });
+        }
+    </script>
+</body>
+
+</html>

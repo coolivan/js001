@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script src="mTween.js"></script>
+<script>
+/*
+    op: {
+        el，
+        attr,
+        shakeLength
+    }
+*/    
+function shake(op){
+    var el = op.el,
+    attr = op.attr,
+    shakeLength = op.shakeLength||15,
+    start = css(box,attr),
+    shakeArr = [];
+    for(var i = shakeLength; i >= 0; i--){
+        shakeArr.push(i%2?i:-i);
+    }
+    move();
+    function move(){
+        requestAnimationFrame(function(){
+            if(shakeArr.length <= 0){
+                console.log("抖动完成");
+            } else {
+                css(el,attr,start + shakeArr.shift());
+                console.log(1);
+                move();
+            }
+        });
+    }
+}    
+(function(){
+    var box = document.querySelector("#box");
+    shake({
+        el: box,
+        attr: "width",
+        shakeLength: 20
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div> 
+<script src="js/mTween.js"></script>    
+<script>
+/*
+
+    css 函数
+*/  
+var transformAttr = [
+    "rotate",
+    "rotateX",
+    "rotateY",
+    "rotateZ",
+    "translateX",
+    "translateY",
+    "translateZ",
+    "scale",
+    "scaleX",
+    "scaleY",
+    "skewX",
+    "skewY"
+]; 
+function css(el,attr,val){
+    if(transformAttr.indexOf(attr) >= 0){
+        return setTransform(el,attr,val);
+    }
+    if(val === undefined){
+        return parseFloat(getComputedStyle(el)[attr]);
+    } else {
+        if(attr == "opacity"){
+            el.style[attr] = val;
+            el.style.filter = "alpha(opacity="+(val*100)+")";
+        } else {
+            el.style[attr] = val + "px";
+        }
+    }
+}
+function setTransform(el,attr,val){
+    el.transform = el.transform||{};
+    if(val === undefined){
+        return  el.transform[attr];
+    }
+    el.transform[attr] = val;
+    var transformVal = "";
+    for(var s in  el.transform){
+        switch(s){
+            case "rotate":
+            case "rotateX":
+            case "rotateY":
+            case "rotateZ":
+            case "skewX":
+            case "skewY":
+                transformVal += s+'('+ el.transform[s]+'deg) ';
+                break;
+            case "translateX":
+            case "translateY":
+            case "translateZ":
+                transformVal += s+'('+ el.transform[s]+'px) ';
+                break;
+            case "scale":
+            case "scaleX":
+            case "scaleY":
+                transformVal += s+'('+ el.transform[s]+') ';
+                break;       
+        }
+    }
+    el.style.WebkitTransform = el.style.transform = transformVal.trim();
+}
+(function(){
+    var box = document.querySelector("#box");
+    css(box,"rotate",0)
+    css(box,"translateX",0)
+    // console.log(css(box,"rotate"));
+    console.log(css(box,"background"));
+    mTween({
+        el: box,
+        attr: {
+            rotate: 360
+        },
+        duration: 800,
+        cb: function(){
+            mTween({
+                el: box,
+                attr: {
+                    translateX: 100
+                }
+            });
+        }
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        p {
+            width:100px;
+            height: 100px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<p id="text">妙味</p>
+<script>
+{
+    let text = document.querySelector("#text");
+    document.onmousedown = function(e){
+        console.log(e.button);
+        // 0 鼠标左键
+        // 1 鼠标滚轮
+        // 2 鼠标右键
+    };
+    document.addEventListener("contextmenu",function(e){
+        e.preventDefault();
+    });
+}
+</script>
+</body>
+</html>

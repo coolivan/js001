@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            transform: rotate(40deg);
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div> 
+<script src="js/mTween.js"></script>    
+<script>
+/*
+
+    css 函数
+*/    
+function css(el,attr,val){
+    if(val === undefined){
+        return parseFloat(getComputedStyle(el)[attr]);
+    } else {
+        if(attr == "opacity"){
+            el.style[attr] = val;
+            el.style.filter = "alpha(opacity="+(val*100)+")";
+        } else {
+            el.style[attr] = val + "px";
+        }
+    }
+}
+(function(){
+    var box = document.querySelector("#box");
+    console.log(getComputedStyle(box)["transform"]);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+<title>Document</title>
+<script type="text/javascript" src="js/bscroll.js"></script>
+<style type="text/css">
+body {
+	margin: 0;
+}	
+#box {
+	height: 100vh;
+	overflow: hidden;
+}
+#list {
+	width: 200vw;
+}
+</style>
+</head>
+<body>
+<div id="box">
+	<ul id="list"></ul>
+</div>	
+<script type="text/javascript">
+let listScroll;
+// 添加滚动
+(function(){
+	let box = document.querySelector('#box');
+	listScroll = new BScroll(box,{
+		scrollX: false,
+		startY: -100,
+		bounce: false
+
+	})
+})();
+// 生成布局
+(function(){
+	let list = document.querySelector('#list');
+	let inner = "";
+	let length = 100;
+	for (var i = 0; i < length; i++) {
+		inner += "<li>这是第"+i+"个li</li>"
+	}
+	list.innerHTML = inner;
+	listScroll.refresh();
+})();	
+</script>
+</body>
+</html>

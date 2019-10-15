@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box,
+        #box2 {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+        #box2 {
+            top: 200px;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script src="js/mTween.js"></script>
+<script>
+(function(){
+    var box = document.querySelector("#box");
+    move1();
+    function move1(){
+        mTween({
+            el:box,
+            attr:{
+                left: 400,
+                top: 0
+            },
+            cb: move2
+        });
+    }
+    function move2(){
+        mTween({
+            el:box,
+            attr:{
+                left: 400,
+                top: 400
+            },
+            cb: move3 
+        });
+    }
+    function move3(){
+        mTween({
+            el:box,
+            attr:{
+                left: 0,
+                top: 400
+            },
+            cb:move4
+        });
+    }
+    function move4(){
+        mTween({
+            el:box,
+            attr:{
+                left: 0,
+                top: 0
+            },
+            cb:move1
+        });
+    }
+})();
+</script>
+</body>
+</html>

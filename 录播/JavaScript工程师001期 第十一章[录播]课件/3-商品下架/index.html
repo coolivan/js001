@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="css/index.css" rel="stylesheet" />
+</head>
+<body>
+<h1 id="logo">
+    <img src="img/miaov.png" />
+</h1> 
+<div class="wrap">
+    <ul class="shopList">
+        <li>
+            <header>
+                <input type="datetime-local" class="datetime" />
+                <a class="btn">确定</a>
+            </header>
+            <p class="remainingTime">剩余<time><span>0</span><span>0</span>:<span>0</span><span>0</span>:<span>0</span><span>0</span></time></p>
+            <div class="shop-img">
+                <img src="img/shop0.jpg" />
+            </div>
+            <h2 class="shop-title">Apple iPhone 7 Plus 64g</h2>
+            <p class="shop-price">抢购价：<span>￥5799</span></p>
+            <div class="over"></div>
+        </li>
+        <li>
+            <header>
+                <input type="datetime-local" class="datetime" />
+                <a class="btn">确定</a>
+            </header>
+            <p class="remainingTime">剩余<time><span>0</span><span>0</span>:<span>0</span><span>0</span>:<span>0</span><span>0</span></time></p>
+            <div class="shop-img">
+                <img src="img/shop1.jpg" />
+            </div>
+            <h2 class="shop-title">27 英寸配备 Retina 5K显示屏</h2>
+            <p class="shop-price">抢购价：<span>￥15999</span></p>
+            <div class="over"></div>
+        </li>
+        <li>
+            <header>
+                <input type="datetime-local" class="datetime" />
+                <a class="btn">确定</a>
+            </header>
+            <p class="remainingTime">剩余<time><span>0</span><span>0</span>:<span>0</span><span>0</span>:<span>0</span><span>0</span></time></p>
+            <div class="shop-img">
+                <img src="img/shop2.jpg" />
+            </div>
+            <h2 class="shop-title">iPad mini 4</h2>
+            <p class="shop-price">抢购价：<span>¥1799</span></p>
+            <div class="over"></div>
+        </li>
+        <li>
+            <header>
+                <input type="datetime-local" class="datetime" />
+                <a class="btn">确定</a>
+            </header>
+            <p class="remainingTime">剩余<time><span>0</span><span>0</span>:<span>0</span><span>0</span>:<span>0</span><span>0</span></time></p>
+            <div class="shop-img">
+                <img src="img/shop3.jpg" />
+            </div>
+            <h2 class="shop-title">Apple Watch</h2>
+            <p class="shop-price">抢购价：<span>￥3799</span></p>
+            <div class="over"></div>
+        </li>
+    </ul>
+    <section class="overList">
+        <header>
+            <h3>商品名称</h3>
+            <h3>价格</h3>
+        </header>
+        <ul class="list">
+            <!-- <li>
+                <p>Apple iPhone 7 Plus 64g </p>
+                <p>¥5799</p>
+                <div class="shop-img">
+                    <img src="img/shop0.jpg" />
+                </div>
+            </li>
+             -->
+        </ul>
+    </section>
+</div>
+<script src="js/mTween.js"></script>
+<script>
+/*
+    1. 布局
+    2. 设置默认到期时间
+    3. 倒计时
+    4. 修改到期时间
+    5. 到期之后，下架动画
+        1. 显示遮罩
+        2. 抖动
+        3. 下落消失
+        4. 生成内容
+*/   
+
+// 设置默认到期时间
+(function(){
+    var shops = document.querySelectorAll(".shopList li");
+    for(var i = 0; i < shops.length; i++){
+        setTime(shops[i])
+    }
+    // 设置单间商品的到期时间
+    function setTime(shop){
+        var datetime = shop.querySelector(".datetime");
+        var btn =  shop.querySelector(".btn");
+        var target = setTargetTime();
+        datetime.value = setDateVal(target);
+        countdown(shop,target);
+        // 修改到期时间
+        btn.onclick = function(){
+            //console.log();
+            clearInterval(shop.timer);
+            var now = datetime.value;
+            var nowDate = now.split("T")[0];
+            var nowTime = now.split("T")[1];
+            var year = nowDate.split("-")[0];
+            var month = nowDate.split("-")[1] - 1;
+            var date = nowDate.split("-")[2];
+            var hours = nowTime.split(":")[0];
+            var minutes = nowTime.split(":")[1];
+            //console.log(nowDate,nowTime);
+            target = new Date(year,month,date,hours,minutes,0,0);
+            countdown(shop,target)
+        };
+    }
+})();
+function countdown(shop,target){
+    /*
+        当前时间
+        目标时间
+    */
+    var time = shop.querySelector(".remainingTime time");
+    shop.timer =  setInterval(function(){
+        var nowDate = Date.now();
+        if(nowDate >= target.getTime()){
+            clearInterval(shop.timer);
+            time.innerHTML = '<span>0</span><span>0</span>:<span>0</span><span>0</span>:<span>0</span><span>0</span>';
+            lowerMove(shop);
+        } else {
+            var disTime = (target.getTime() - nowDate)/1000;
+            var hours = toDB(parseInt(disTime/3600));
+            var minutes = toDB(parseInt((disTime%3600)/60));
+            var seconds = toDB(parseInt(disTime%60));
+            time.innerHTML = "<span>"+hours.split("").join("</span><span>")+"</span>:<span>" + minutes.split("").join("</span><span>")+"</span>:<span>" + seconds.split("").join("</span><span>") + "</span>";
+        } 
+    },1000);
+}
+//下架动画
+function lowerMove(shop){
+    var over = shop.querySelector(".over");
+    css(over,"opacity",.1);
+    css(over,"scale",1.5);
+    css(over,"display","block");
+    mTween({
+        el: over,
+        attr: {
+            opacity:1,
+            scale: 1
+        },
+        duration: 200,
+        fx: "easeIn",
+        cb: function(){
+            css(shop,"translateX",0);
+            shake({
+                el: shop,
+                attr: "translateX",
+                shakeLength: 20,
+                cb: function(){
+                    css(shop,"translateY",0);
+                    mTween({
+                        el: shop,
+                        attr: {
+                            translateY: 200,
+                            opacity: 0
+                        },
+                        cb: function(){
+                            create(shop);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+function create(shop){
+    var list = document.querySelector(".overList .list");
+    var title = shop.querySelector(".shop-title").innerHTML;
+    var price = shop.querySelector(".shop-price span").innerHTML;
+    var img = shop.querySelector(".shop-img").innerHTML;
+    list.innerHTML += '<li><p>' + title + '</p><p>' + price + '</p><div class="shop-img">' + img + '</div></li>';
+}
+
+// 格式日期变成 datatime-local 可以接受的val
+function setDateVal(date){
+//2019-03-07T21:57
+    var year = date.getFullYear();
+    var month = toDB(date.getMonth() + 1);
+    var nowDate = toDB(date.getDate());
+    var hours = toDB(date.getHours());
+    var minutes = toDB(date.getMinutes());
+    return year+'-'+month+'-'+nowDate+'T'+hours+':' +minutes;
+}
+// 获取到期时间
+function setTargetTime(){
+    var minutes = Math.round(Math.random() * 10)+1;
+    var nowTime = new Date(Date.now()+minutes*60000);
+    return new Date(nowTime.getFullYear(),nowTime.getMonth(),nowTime.getDate(),nowTime.getHours(),nowTime.getMinutes(),0,0);
+}
+function toDB(nub){
+    return nub<10?"0"+nub:""+nub;
+}
+</script>
+</body>
+</html>

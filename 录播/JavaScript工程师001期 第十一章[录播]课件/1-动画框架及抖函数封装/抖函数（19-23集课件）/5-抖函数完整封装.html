@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #box {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+<div id="box"></div>
+<script src="mTween.js"></script>
+<script>
+/*
+    op: {
+        el，
+        attr,
+        shakeLength
+    }
+*/    
+function shake(op){
+    var el = op.el,
+    attr = op.attr,
+    shakeLength = op.shakeLength||15,
+    shakeArr = [];
+    el.shakeStart = {};
+    if(el.shake) {
+        return ;
+    } 
+    if(typeof attr === "object" ){
+        for(var i = 0; i < attr.length; i++){
+            el.shakeStart[attr[i]] = css(el,attr[i]);
+        }
+    } else {
+        el.shakeStart[attr] = css(el,attr);
+    }
+    for(var i = shakeLength; i >= 0; i--){
+        shakeArr.push(i%2?i:-i);
+    }
+    move();
+    function move(){
+        el.shake = requestAnimationFrame(function(){
+            if(shakeArr.length <= 0){
+                el.shake = false;
+                op.cb&&op.cb();
+            } else {
+                var nub = shakeArr.shift();
+                for(var s in  el.shakeStart){
+                    css(el,s, el.shakeStart[s] + nub);
+                }
+                move();
+            }
+        });
+    }
+}    
+shake.stop = function(el){
+    cancelAnimationFrame(el.shake);
+    el.shake = false;
+    for(var s in  el.shakeStart){
+        css(el,s, el.shakeStart[s]);
+    }
+};
+(function(){
+    var box = document.querySelector("#box");
+    box.onclick = function(){
+        shake.stop(box);
+        shake({
+            el: box,
+            attr: "left",
+            shakeLength: 20,
+            cb: function(){
+                mTween({
+                    el: box,
+                    attr: {
+                        top: 500
+                    },
+                    duration: 1000,
+                    fx: "bounceOut"
+                });
+            }
+        });
+    };
+})();
+</script>
+</body>
+</html>

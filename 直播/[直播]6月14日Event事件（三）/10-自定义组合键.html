@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<input type="text" id="text" />
+<script>
+{
+    let text = document.querySelector("#text");
+    // 同时按着上下键提交
+    // 上 38 
+    // 下 40
+    let lastCode = ""; //保存上一次按键
+    text.addEventListener("keydown",function(e){
+        //console.log(e.keyCode);// 每次只能获取一个
+        if(e.keyCode == 38 && lastCode == 40 
+        || e.keyCode == 40 && lastCode == 38){
+            console.log(this.value);
+        } else {
+            lastCode = e.keyCode;
+        }
+    });
+    text.addEventListener("keyup",function(){
+        lastCode = ""; 
+    });
+}
+</script>
+</body>
+</html>
